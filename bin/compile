@@ -12,6 +12,19 @@ ENV_DIR=${3:-}
 ssh_key="$(cat $ENV_DIR/SSH_KEY)"
 ssh_hosts=${SSH_HOSTS:-"git@github.com"}
 
+netrc_host="$(cat $ENV_DIR/NETRC_HOST)"
+netrc_user="$(cat $ENV_DIR/NETRC_USER)"
+netrc_pass="$(cat $ENV_DIR/NETRC_PASS)"
+
+if [ "$netrc_host" != "" ]; then
+	echo 'machine '$netrc_host >> $1/.netrc
+	echo '  login '$netrc_user >> $1/.netrc
+	echo '  password '$netrc_pass >> $1/.netrc
+	echo "-----> Added .netrc file"
+else
+	echo "-----> No .netrc config"
+fi
+
 if [ "$ssh_key" != "" ]; then
 	echo "-----> Running SSH private key setup"
 
